@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Hakaton</string>
+    <string name="check">M 0.0,0.0 h 24.0 v 24.0 H 0.0 L 0.0,0.0 M 9.0,16.2 l 0.0,0.0 L 4.8,12.0 H 4.8 v 0.0 h 0.0 l -1.4,1.4 L 9.0,19.0 L 21.0,7.0 l -1.4,-1.4 L 9.0,16.2 L 9.0,16.2</string>
+    <string name="arrow">M 0.0,0.0 h 24.0 v 24.0 H 0.0 L 0.0,0.0 M 12.0,4.0 l -1.41,1.41 L 16.17,11.0 H 4.0 v 2.0 h 12.17 l -5.58,5.59 L 10.59,18.59 L 12.0,20.0 l 8.0,-8.0 L 20.0,12.0 L 12.0,4.0</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>
