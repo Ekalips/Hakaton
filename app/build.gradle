@@ -26,4 +26,5 @@ dependencies {
     compile 'com.android.support:design:23.2.1'
     compile 'com.github.rey5137:material:1.2.2'
     compile 'com.android.support:support-v4:23.2.1'
+    compile 'com.github.asyl.animation:arcanimator:1.0.0'
 }
