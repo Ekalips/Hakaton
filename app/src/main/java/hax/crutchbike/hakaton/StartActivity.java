@@ -14,14 +14,18 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 
 
@@ -34,7 +38,7 @@ import io.codetail.animation.arcanimator.Side;
 public class StartActivity extends AppCompatActivity {
 
 
-    FragmentTransaction fTrans;
+    FragmentTransaction fTrans;EditText login;EditText password;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +48,8 @@ public class StartActivity extends AppCompatActivity {
         tabLayout.addTab(tabLayout.newTab().setText("Registration"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         final Context context = this;
-
+         login = (EditText) findViewById(R.id.input_login);
+         password = (EditText) findViewById(R.id.input_password);
         final TextInputLayout textInputEditText = (TextInputLayout) findViewById(R.id.input_layout_login);
         final TextInputLayout registr = (TextInputLayout) findViewById(R.id.input_layout_password);
         final TextInputLayout lel = (TextInputLayout) findViewById(R.id.input_layout_lel);
@@ -64,9 +69,50 @@ public class StartActivity extends AppCompatActivity {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     requestPermissions(perms, permsRequestCode);
                 }
-                sendData();
+
+                if (!verifyLogin()) {textInputEditText.setErrorEnabled(true); textInputEditText.setError("Incorrect login");}
+                else textInputEditText.setErrorEnabled(false);
+                if (!verifyPassword()) {registr.setErrorEnabled(true); registr.setError("Incorrect password. Minimal 8 symbols needed");}
+                else registr.setErrorEnabled(false);
+                if(verifyLogin() && verifyPassword()) sendData();
             }
         });
+
+        login.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!verifyLogin()) {textInputEditText.setErrorEnabled(true); textInputEditText.setError("Incorrect password. Minimal 8 symbols needed");}
+                else textInputEditText.setErrorEnabled(false);
+            }
+        });
+        password.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!verifyPassword()) {registr.setErrorEnabled(true); registr.setError("Incorrect password");}
+                else registr.setErrorEnabled(false);
+            }
+        });
+
         final FrameLayout fabHome2 = (FrameLayout) findViewById(R.id.fabHome2);
         final FrameLayout fabHome1 = (FrameLayout) findViewById(R.id.fabHome1);
         lel.animate().translationX(width).setDuration(0).start();
@@ -126,12 +172,24 @@ public class StartActivity extends AppCompatActivity {
     }
 
 
+    boolean verifyLogin()
+    {
+        return !login.getText().toString().isEmpty();
+    }
+
+    boolean verifyPassword()
+    {
+        return !password.getText().toString().isEmpty() && password.getText().toString().length()>=8;
+    }
+
     private void sendData() {
         JSONObject postRequest = new JSONObject();
         Log.d("asd","sent");
         try {
-            postRequest.put("username", "us");
-            postRequest.put("password", "pas");
+            Log.d("logs", login.getText().toString() + "lol");
+            postRequest.put("username", login.getText().toString());
+            postRequest.put("password", password.getText().toString());
+
 
 
         } catch (JSONException e) {
@@ -139,9 +197,9 @@ public class StartActivity extends AppCompatActivity {
         }
 
         PostRequester sender = null;
-        try {
 
-            sender = new PostRequester("http://37.139.24.39/index.php?huh=alice",  Helpers.JSONObjectToString(postRequest), new PostRequester.Answer() {
+        try {
+            sender = new PostRequester("http://37.139.24.39/index.php",  Helpers.JSONObjectToString(postRequest), new PostRequester.Answer() {
 
                 @Override
                 public void onSuccess(JSONObject answer) {
